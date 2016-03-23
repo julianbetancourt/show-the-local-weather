@@ -1,0 +1,81 @@
+/*************
+  CARD
+  *************/
+
+$main: rgba(#181514, 0.65)
+
+.card
+  display: flex
+  flex-direction: column
+  text-align: center
+  width: 100%
+  background: $main
+
+.main
+  border-bottom: 1px solid
+  position: relative
+  height: 15.625rem /* 250/16 */
+  color: #fff
+  h1
+    margin: 0
+    font-weight: 300
+    font-size: 7.5rem
+    position: relative
+    .circle
+      font-size: 1.875rem
+      position: absolute
+      font-size: 4.375rem
+  .city
+    font-weight: 600
+    font-size: 3.125rem
+    display: block
+    margin-top: -3.125rem
+    text-transform: uppercase
+
+.info
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  .icon,
+  .unit
+    height: 83.3px
+    font-size: 50px
+    color: #fff
+  .icon,
+  .unit,
+  .desc
+    display: flex
+    justify-content: center
+    align-items: center
+  .icon
+    border-right: 1px solid
+    width: 50%
+  .unit
+    width: 50%
+    cursor: pointer
+    span
+      -webkit-user-select: none
+      -moz-user-select: none
+      -ms-user-select: none
+      user-select: none
+  .desc
+    border-top: 1px solid
+    width: 100%
+    height: 62.5px
+    font-size: 30px
+    color: #fff
+    text-transform: capitalize
+
+@media (min-width: 880px)
+  .card
+    flex-direction: row
+  .main
+    width: 50%
+    border-bottom: none
+    border-right: 1px solid
+  .info
+    width: 50%
+  .icon,
+  .unit,
+  .desc
+    height: auto !important
