@@ -8,8 +8,10 @@ $.getJSON('http://ip-api.com/json', function (ip) {
   var numb;
   var unit;
   var wID;
+  var icon;
+  var icons = {};
 
-  //Request to get temperature number, weatherID, unit and description
+  //Request to get temperature number, weatherID, iconID, unit and description
   $.getJSON('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + long +
             '&APPID=da362a8aa3d1448a36245341e0d8a196', function (w) {
 
@@ -18,6 +20,7 @@ $.getJSON('http://ip-api.com/json', function (ip) {
     numb = w.main.temp;
     unit = 'K';
     wID = w.weather[0].id;
+    icon = w.weather[0].icon;
 
     //Transform K or C to F
     function getF(n) {
@@ -62,68 +65,41 @@ $.getJSON('http://ip-api.com/json', function (ip) {
       }
     }
 
-    //update icon class based on weatherID
-    function getIcon(wID) {
-      if (wID >= 200 && wID <= 232) {
-        $('.weather-icon').addClass('wi-thunderstorm');
-      } else if (wID >= 300 && wID <= 321) {
-        $('.weather-icon').addClass('wi-raindrops');
-      } else if(wID >= 500 && wID <= 531) {
-        $('.weather-icon').addClass('wi-rain');
-      } else if (wID >= 600 && wID <= 622) {
-        $('.weather-icon').addClass('wi-snowflake-cold');
-      } else if (wID >= 701 && wID <= 781) {
-        $('.weather-icon').addClass('wi-fog');
-      } else if (wID === 800) {
-        $('.weather-icon').addClass('wi-day-sunny');
-      } else if (wID >= 801 && wID <= 804) {
-        $('.weather-icon').addClass('wi-cloudy');
-      } else if (wID === 900) {
-        $('.weather-icon').addClass('wi-tornado');
-      } else if (wID === 901) {
-        $('.weather-icon').addClass('wi-storm-showers');
-      } else if (wID === 902) {
-        $('.weather-icon').addClass('wi-hurricane');
-      } else if (wID === 903) {
-        $('.weather-icon').addClass('wi-strong-wind');
-      } else if (wID === 904) {
-        $('.weather-icon').addClass('wi-hot');
-      } else if (wID === 905) {
-        $('.weather-icon').addClass('wi-cloudy-windy');
-      } else if (wID === 906) {
-        $('.weather-icon').addClass('wi-hail');
+    //replace default icon with icon from https://erikflowers.github.io/weather-icons/
+    function getIcon() {
+
+      icons = {
+        '01d': 'wi-day-sunny',
+        '01n': 'wi-night-clear',
+        '02d': 'wi-day-cloudy',
+        '02n': 'wi-night-cloudy',
+        '03d': 'wi-day-cloudy-gusts',
+        '03n': 'wi-night-cloudy-gusts',
+        '04d': 'wi-day-cloudy-gusts',
+        '04n': 'wi-night-cloudy-gusts',
+        '09d': 'wi-day-sprinkle',
+        '09n': 'wi-night-sprinkle',
+        '10d': 'wi-day-rain',
+        '10n': 'wi-night-rain',
+        '11d': 'wi-day-thunderstorm',
+        '11n': 'wi-night-thunderstorm',
+        '13d': 'wi-day-snow',
+        '13n': 'wi-night-snow',
+        '50d': 'wi-day-fog',
+        '50n': 'wi-night-fog'
       }
+      $('.weather-icon').addClass(icons[icon]);
     }
 
-    //Add class to body's background based on weatherID
-    function getBackground(wID) {
-      if (wID >= 200 && wID <= 232) {
-        $('body').addClass('storm');
-      } else if (wID >= 300 && wID <= 321) {
-        $('body').addClass('raindrop');
-      } else if(wID >= 500 && wID <= 531) {
-        $('body').addClass('rain');
-      } else if (wID >= 600 && wID <= 622) {
-        $('body').addClass('snow');
-      } else if (wID >= 701 && wID <= 781) {
-        $('body').addClass('mist');
-      } else if (wID === 800) {
-        $('body').addClass('sunny');
-      } else if (wID >= 801 && wID <= 804) {
-        $('body').addClass('clouds');
-      } else if (wID === 900) {
-        $('body').addClass('tornado');
-      } else if (wID === 901) {
-        $('body').addClass('storm');
-      } else if (wID === 902) {
-        $('body').addClass('storm');
-      } else if (wID === 903) {
-        $('body').addClass('clouds');
-      } else if (wID === 904) {
-        $('body').addClass('sunny');
-      } else if (wID === 906) {
-        $('body').addClass('rain');
-      }
+    //wi-day-sunny ==> day-sunny
+    function getBackgroundClass(s) {
+      s = s.replace('wi-', '');
+      return s;
+    }
+
+    //Add class to body's background based on icon
+    function getBackground() {
+      $('body').addClass(getBackgroundClass(icons[icon]));
     }
 
     //Toggle units on click
@@ -145,8 +121,8 @@ $.getJSON('http://ip-api.com/json', function (ip) {
     //Call functions
     getCity(city);
     updateUnit();
-    getIcon(wID);
-    getBackground(wID);
+    getIcon();
+    getBackground();
   });
 
 });
